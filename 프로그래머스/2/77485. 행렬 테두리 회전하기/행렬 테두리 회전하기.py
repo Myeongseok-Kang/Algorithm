@@ -1,49 +1,41 @@
-from collections import deque
-
 def solution(rows, columns, queries):
-    cols = columns
     answer = []
-    A = [[0 for _ in range(cols)] for _ in range(rows)]
-    num = 1
-    for x in range(rows):
-        for y in range(cols):
-            A[x][y] = num
-            num+=1
-    for x1,y1,x2,y2 in queries:
-        q = deque()        
-        for x in range(x1,x2):
-            q.append(A[x-1][y1-1])
-        for y in range(y1,y2):
-            q.append(A[x2-1][y-1])
-        for x in range(x2,x1,-1):
-            q.append(A[x-1][y2-1])
-        for y in range(y2,y1,-1):
-            q.append(A[x1-1][y-1])
-        answer.append(min(q))
-        q.rotate(-1)
-        for x in range(x1,x2):
-            A[x-1][y1-1] = q.popleft()
-        for y in range(y1,y2):
-            A[x2-1][y-1] = q.popleft()
-        for x in range(x2,x1,-1):
-            A[x-1][y2-1] = q.popleft()
-        for y in range(y2,y1,-1):
-            A[x1-1][y-1] = q.popleft()    
-    return answer
-    # x: 행(row)
+    cols = columns
+    board = [[0 for _ in range(cols)] for _ in range(rows)]
+    tmp = 0
+    for y in range(rows):
+        for x in range(cols):
+            tmp += 1
+            board[y][x] = tmp
     
-"""
-    1. 행렬 생성
-    2.for x1, y1, x2, y2 in qu:
-        q = deque()
-        x1 y1     x2 y1    x2 y2    x1 y2
-        (x1,y1) 부터 (x2-1,y1) 까지 덱에 넣기
-        (x2,y1) 부터 (x2,y2-1) 까지 덱에
-        (x2,y2) 부터 (x1+1,y2)
-        (x1,y2) 부터 (x1,y1+1)
+    for r1,c1,r2,c2 in queries:
+        r1,c1,r2,c2 = r1-1,c1-1,r2-1,c2-1
+        val = []
+        for x in range(c1,c2+1):
+            val.append(board[r1][x])
+        for y in range(r1+1,r2+1):
+            val.append(board[y][c2])
+        for x in range(c2-1,c1-1,-1):
+            val.append(board[r2][x])
+        for y in range(r2-1,r1,-1):
+            val.append(board[y][c1])
+        val.insert(0,val[-1])
+        val = val[:-1]
         
-        answer.append(min(q))
-        q.rotate()
-        while q:
-            //아까 그대로 q.popleft() 하면서 배열에 넣기
-"""
+        idx = 0
+        for x in range(c1,c2+1):
+            board[r1][x] = val[idx]
+            idx += 1
+        for y in range(r1+1,r2+1):
+            board[y][c2] = val[idx]
+            idx += 1
+        for x in range(c2-1,c1-1,-1):
+            board[r2][x] = val[idx]
+            idx += 1
+        for y in range(r2-1,r1,-1):
+            board[y][c1] = val[idx]
+            idx += 1
+        answer.append(min(val))
+        
+    
+    return answer
