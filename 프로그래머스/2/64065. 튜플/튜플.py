@@ -1,18 +1,23 @@
 def solution(s):
-    s = s[2:-2]
-    sets = s.split('},{')
-    set_list = []
-    for numbers in sets:
-        nums = numbers.split(',')
-        set_list.append(nums)
-        
-    set_list.sort(key = lambda x: len(x))
     answer = []
-    memory = set()
-    for num_list in set_list:
-        for num in num_list:
-            if num not in memory:
-                answer.append(int(num))
-                memory.add(num)
-                break
+    """
+    튜플 추출해서 정렬하고
+    튜플 번호과 인덱스 1씩 증가시키면서 answer에 넣음
+    
+    """
+    s = s[2:-2]
+    tuples = s.split("},{")
+    
+    for i,t in enumerate(tuples):
+        tuples[i] = t.split(',')
+    
+    tuples.sort(key = lambda x: len(x))
+    
+    
+    for t in tuples:
+        for v in t:
+            if v not in answer:
+                answer.append(v)
+    answer = [int(x) for x in answer]
+        
     return answer
