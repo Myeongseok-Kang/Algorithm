@@ -1,27 +1,31 @@
 from collections import deque
+dy = [-1,1,0,0]
+dx = [0,0,-1,1]
 
-def solution(places):
-    dir = [(0,-1),(0,1),(-1,0),(1,0)]
-    answer = []
-    def f(place):
+
+def bfs(place):
+    for y in range(5):
         for x in range(5):
-            for y in range(5):
-                if place[x][y] == 'P':
-                    visit = [[False for _ in range(5)] for _ in range(5)]
-                    D = [[0 for _ in range(5)] for _ in range(5)]
-                    visit[x][y] = True
-                    q = deque([(x,y)])
-                    while q:
-                        cx,cy = q.popleft()
-                        for dx,dy in dir:
-                            nx,ny = cx+dx,cy+dy
-                            if 0 <= nx <= 4 and 0 <= ny <= 4 and visit[nx][ny] == False and place[nx][ny] != 'X':
-                                if place[nx][ny] == 'P': return 0
-                                D[nx][ny] = D[cx][cy] + 1
-                                visit[nx][ny] = True
-                                if D[nx][ny] < 2: q.append((nx,ny))
-        return 1
+            if place[y][x] == 'P':
+                q = deque()
+                q.append((y,x,0))
+                visit = [[False] * 5 for _ in range(5)]
+                visit[y][x] = True
+                while q:    
+                    cury,curx,curd = q.popleft()
+                    if curd == 2: continue
+                    for angle in range(4):
+                        ny,nx,nd = cury+dy[angle],curx+dx[angle],curd+1
+                        if (0<=ny<=4 and 0<=nx<=4 and not visit[ny][nx] and place[ny][nx] != 'X'):
+                            if place[ny][nx] == 'P': return 0
+                            visit[ny][nx] = True
+                            q.append((ny,nx,nd))
+    return 1
+        
+def solution(places):
     
+    answer = []
+
     for p in places:
-        answer.append(f(p))
+        answer.append(bfs(p))
     return answer
