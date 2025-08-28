@@ -1,25 +1,21 @@
 def solution(sequence, k):
     answer = []
-    su_len = 1e7
-    sp,ep = 0,0
-    tmp = sequence[0]
-    l = len(sequence)
+    ans_list = []
+    s,e = 0,0
+    summ = sequence[0]
     
-    while ep >= sp:
-        if tmp < k:
-            ep += 1
-            if ep == l: break
-            tmp += sequence[ep]
-        elif tmp > k:
-            tmp -= sequence[sp]
-            sp += 1
-            
+    while True:
+        if summ < k:
+            e += 1
+            if e == len(sequence): break
+            summ += sequence[e]
+        elif summ > k:
+            summ -= sequence[s]
+            s += 1
         else:
-            if ep - sp < su_len:
-                su_len = ep - sp
-                answer = [sp,ep]
-            ep += 1
-            if ep == l: break
-            tmp += sequence[ep]
+            ans_list.append([s,e])
+            summ -= sequence[s]
+            s += 1
     
-    return answer
+    ans_list.sort(key = lambda x: (x[1]-x[0],x[0]))
+    return ans_list[0]
