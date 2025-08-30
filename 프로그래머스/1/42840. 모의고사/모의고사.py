@@ -2,14 +2,15 @@ def solution(answers):
     p1 = [1,2,3,4,5] # 5
     p2 = [2,1,2,3,2,4,2,5] # 8
     p3 = [3,3,1,1,2,2,4,4,5,5] # 10
-    check = [0] * 3
-    for i in range(len(answers)):
-        if answers[i] == p1[i%5]: check[0] += 1
-        if answers[i] == p2[i%8]: check[1] += 1
-        if answers[i] == p3[i%10]: check[2] += 1
+    ans1,ans2,ans3 = 0,0,0
     
-    max_val = max(check)
-    ans = []
-    for i in range(3):
-        if check[i] == max_val: ans.append(i+1)
-    return ans
+    for i,v in enumerate(answers):
+        if v == p1[i%5]: ans1 += 1
+        if v == p2[i%8]: ans2 += 1
+        if v == p3[i%10]: ans3 += 1
+    maxx = max(ans1,ans2,ans3)
+    answer = []
+    if ans1 == maxx: answer.append(1)
+    if ans2 == maxx: answer.append(2)
+    if ans3 == maxx: answer.append(3)
+    return answer
