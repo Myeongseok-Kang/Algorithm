@@ -1,17 +1,15 @@
-import sys
-sys.setrecursionlimit(10**6)
-
 def solution(word):
-    ans = 0
-    alpha = ['A','E','I','O','U']
-    words = []
-    def dfs(cur):
-        words.append(''.join(cur))
-        if len(cur) == 5: return
-        for c in alpha:
-            cur.append(c)
-            dfs(cur)
-            cur.pop()
-    dfs([])
-    for i,v in enumerate(words):
-        if v == word: return i
+    ch = [781,156,31,6,1]
+    dic = {'E':1,'I':2,'O':3,'U':4,'X':0}
+    while len(word) != 5:
+        word += ('X')
+    val = 0
+    for i,c in enumerate(word):
+        if c == 'A':
+            val += 1
+        elif c != 'X':
+            val += (dic[c]*ch[i])
+            val += 1
+        
+            
+    return val
