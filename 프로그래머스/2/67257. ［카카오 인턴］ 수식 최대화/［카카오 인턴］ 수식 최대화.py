@@ -1,33 +1,39 @@
 from itertools import permutations
 
 def solution(expression):
-    option = ['*', '+', '-']
-    cases = list(permutations(option))
-    ans = []
-
-    string = []
-    prev = 0
+    answer = 0
+    nums = []
+    op = []
+    ptr = 0
     for i in range(len(expression)):
-        if expression[i] in option:
-            string.append(expression[prev:i])
-            string.append(expression[i])
-            prev = i + 1
-    string.append(expression[prev:])
-
-    for case in cases:
-        tmp = string[:]  
-        for cmd in case:
-            idx = 0
-            while idx < len(tmp):
-                if tmp[idx] == cmd:
-                    if cmd == '*':
-                        tmp[idx-1:idx+2] = [str(int(tmp[idx-1]) * int(tmp[idx+1]))]
-                    elif cmd == '+':
-                        tmp[idx-1:idx+2] = [str(int(tmp[idx-1]) + int(tmp[idx+1]))]
-                    elif cmd == '-':
-                        tmp[idx-1:idx+2] = [str(int(tmp[idx-1]) - int(tmp[idx+1]))]
-                    idx -= 1
-                idx += 1
-        ans.append(abs(int(tmp[0])))
-
-    return max(ans)
+        if not expression[i].isdigit():
+            nums.append(int(expression[ptr:i]))
+            op.append(expression[i])
+            ptr = i + 1
+    nums.append(int(expression[ptr:]))
+    
+    A = set()
+    for c in expression:
+        if not c.isdigit():
+            A.add(c)
+    A = list(A)
+    
+    if len(nums) == 1: return nums[0]
+    for per in permutations(A,len(A)): #per은 연산자 우선순위
+        nn = nums.copy()
+        oo = op.copy()
+        
+        for p in per:
+            while p in oo:
+                idx = oo.index(p)
+                if p == '-':
+                    val = nn.pop(idx) - nn.pop(idx)
+                elif p == '+':
+                    val = nn.pop(idx) + nn.pop(idx)
+                else:
+                    val = nn.pop(idx) * nn.pop(idx)
+                nn.insert(idx,val)
+                oo.pop(idx)
+        answer = max(abs(nn[0]),answer)
+            
+    return answer
