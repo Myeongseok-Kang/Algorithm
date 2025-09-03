@@ -1,31 +1,36 @@
+from collections import defaultdict
 def solution(genres, plays):
     answer = []
-    """
-    1. 장르별로 재생 수 저장해서 장르 내림차순 정렬
-    2. 장르별로 (노래의 인덱스,재생 횟수) 저장 - 리스트 안에 넣으면 됨
-    3.  2번을  1..재생 내림차순, 2..고유번호 오름차순 정렬
-    """
-    gen_count = {}
-    gen_song = {}
+    cnt = defaultdict(int)
+    l = len(plays)
+    for i in range(l):
+        cnt[genres[i]] += plays[i]
     
-    for i in range(len(plays)):
-        gen = genres[i]
-        play = plays[i]
-        if gen not in gen_count:
-            gen_count[gen] = play
-            gen_song[gen] = [(i,play)]
-        else:
-            gen_count[gen] += play
-            gen_song[gen].append((i,play))
+    gen = [] #(장르이름,재생수)
+    for key in cnt:
+        gen.append((key,cnt[key]))
+    gen.sort(key = lambda x: -x[1])
+    gen = [x[0] for x in gen]
     
-    gg = list(gen_count.items())
-    gg.sort(key = lambda x: -x[1])
+    dic = {}
+    for g in gen:
+        dic[g] = []
     
-    for gen in gg:
-        l = gen_song[gen[0]]
-        l.sort(key = lambda x: (-x[1],x[0]))
-        l = l[:2]
-        for i, j in l:
-            answer.append(i)
+    for i in range(l):
+        dic[genres[i]].append((plays[i],i))
     
+    for g in gen:
+        A = dic[g].copy()
+        A.sort(key = lambda x: (-x[0],x[1]))
+        A = A[:2]
+        for i,j in A:
+            answer.append(j)
     return answer
+"""
+장르당 곡 하나면 하나만
+
+gen = 가장 많이 수록된 장르 순으로 정렬
+dic = {장르:[  (재생수,곡인덱스) 가 들어가있는 배열  ]}
+for g in gen:
+    dic[g]의 배열을 copy 하고 정렬(기준 주의)해서 가장 많은거 1개 또는 2개
+"""
