@@ -1,19 +1,21 @@
 from collections import deque
 
-
-
 def solution(numbers, target):
-    def bfs():
-        nonlocal ans
-        q = deque([(0,0)]) #idx , num
-        while q:
-            cur_idx,num = q.popleft()
-            if cur_idx == len(numbers):
-                if num == target: ans += 1
-                continue
-            q.append((cur_idx+1,num+numbers[cur_idx]))
-            q.append((cur_idx+1,num-numbers[cur_idx]))
-    
+    q = deque()
+    q.append((0,0))
     ans = 0
-    bfs()
+    while q:
+        cur,idx = q.popleft()
+        for i in range(2):
+            if i == 0:
+                n = cur + numbers[idx]
+            elif i == 1:
+                n = cur - numbers[idx]
+                
+            if idx == len(numbers)-1:
+                if n == target: ans += 1
+            else:
+                q.append((n,idx+1))
     return ans
+                
+        
