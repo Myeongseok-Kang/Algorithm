@@ -1,29 +1,26 @@
 from collections import deque
 
 def solution(n, computers):
+    answer = 0
     Elist = [[] for _ in range(n)]
-    
     for i in range(n):
         for j in range(n):
-            if i != j and computers[i][j]:
+            if computers[i][j] and i != j:
                 Elist[i].append(j)
-                
-    visit = [False] * n
-    answer = 0
+                Elist[j].append(i)
     
-    def bfs(x):
-        q = deque([x])
-        visit[x] = True
-        while q:
-            now = q.popleft()
-            for next in Elist[now]:
-                if not visit[next]:
-                    visit[next] = True
-                    q.append(next)
-
+    V = [False] * n
     for i in range(n):
-        if not visit[i]:
+        if not V[i]:
             answer += 1
-            bfs(i)
-    print(Elist)
+            q = deque()
+            q.append(i)
+            V[i] = True
+            while q:
+                cur = q.popleft()
+                for nn in Elist[cur]:
+                    if not V[nn]:
+                        V[nn] = True
+                        q.append(nn)
+    
     return answer
