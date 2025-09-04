@@ -1,18 +1,22 @@
 def solution(people, limit):
-    s = 0
-    e = len(people) -1
-    answer = 0
+    if len(people) == 1:
+        return 1
+    
     people.sort()
-    while s<=e: 
-        if people[e] + people[s] > limit:
-            answer += 1
+    s,e = 0,len(people)-1
+    
+    answer = len(people) #두명 탈때마다 1씩 감소
+    
+    while True: # s!=e
+        if people[s] + people[e] > limit:
             e -= 1
+            if s == e: break
         else:
-            e -= 1
+            answer -= 1
             s += 1
-            answer += 1
-        if s == e:
-            answer += 1
-            e-=1
-            s+= 1
+            e -= 1
+            if s >= e: break
     return answer
+"""
+50 50 70 80
+"""
