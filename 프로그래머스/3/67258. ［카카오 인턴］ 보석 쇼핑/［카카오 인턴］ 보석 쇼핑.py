@@ -1,24 +1,31 @@
 def solution(gems):
-    if len(gems) == 1: return [1, 1]
-    answer = [] #+1해서 업데이트 해야함
-    min_len = len(gems)+1 #amswer의
-    dic = dict() #len(dic) == size일때 구간 만족, 0으로 변하면 del로 삭제 필요
-    dic[gems[0]] = 1
-    size = len(set(gems))
+    if len(gems) == 1: return [1,1]
+    l = len(set(gems))
+    dic = {gems[0]:1} #길이가 l일때만 답 업데이트
+    answer = [1,len(gems)] #+1해준 인덱스임
+    min_ans = len(gems) -1 #보다 작아야 답 업데이트
     s,e = 0,0
-    while e <= len(gems)-1:
-        if size == len(dic):
-            if e-s+1 < min_len:
-                min_len = e-s+1
-                answer = [s+1,e+1]
-            if dic[gems[s]] == 1: del dic[gems[s]]
-            else: dic[gems[s]] -= 1
-            s += 1
-        else:
+    while True:
+        if len(dic) < l:
             e += 1
-            if e>=len(gems): break
-            if gems[e] in dic: dic[gems[e]] += 1
+            if e == len(gems): break
+            cur = gems[e]
+            if cur in dic:
+                dic[cur] += 1
             else:
-                dic[gems[e]] = 1
-    
+                dic[cur] = 1
+            
+        else:
+            if min_ans > e-s:
+                answer = [s+1,e+1]
+                min_ans = e-s
+            cur = gems[s]
+            if dic[cur] == 1:
+                del dic[cur]
+            else:
+                dic[cur] -= 1
+            s+= 1
+            
+            
+            
     return answer
