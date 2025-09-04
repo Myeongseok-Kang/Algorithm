@@ -1,18 +1,15 @@
 def solution(n, times):
-    s,e = min(times),n*max(times)
-    
-    def check(hour):
-        cnt = 0
-        for t in times:
-            cnt += (hour//t)
-        if cnt >= n: return True
-        else: return False
-    
+    s,e = 1,max(times)*n
     while s<=e:
         m = (s+e)//2
-        if check(m): #m시간 안에 심사 가능함?
-            e = m-1
-        else:
+        total = 0
+        for t in times:
+            total += (m//t)
+        
+        if total < n: #m시간에 n명처리 안된다
             s = m+1
-            
-    return s
+        else: #된다
+            answer = m
+            e = m-1
+    
+    return answer
