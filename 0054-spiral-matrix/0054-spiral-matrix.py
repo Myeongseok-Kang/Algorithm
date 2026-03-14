@@ -15,3 +15,4 @@ class Solution:
                 cnt += 1
             if cnt == r*c: break
         return ans
+        
