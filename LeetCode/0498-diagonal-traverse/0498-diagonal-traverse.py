@@ -2,7 +2,7 @@ class Solution:
     def findDiagonalOrder(self, mat: List[List[int]]) -> List[int]:
         if len(mat) == 1 and len(mat[0]) == 1: return [mat[0][0]]
         y,x = 0,0
-        dd = 0  #0은 위로 1은 아래로
+        dd = 0
         r = len(mat)
         c = len(mat[0])
         dy = [-1,1]
