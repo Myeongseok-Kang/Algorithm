@@ -30,14 +30,21 @@ jobs:
 
           mkdir -p LeetCode
 
-          echo "Changed files in this push:"
-          git diff --name-only HEAD~1 HEAD || true
-
           found=0
           for d in [0-9][0-9][0-9][0-9]-*; do
             if [ -d "$d" ]; then
-              echo "Moving directory: $d"
-              mv "$d" "LeetCode/" && found=1
+              found=1
+              target="LeetCode/$d"
+
+              if [ -d "$target" ]; then
+                echo "Updating existing directory: $d -> $target"
+                mkdir -p "$target"
+                cp -a "$d"/. "$target"/
+                rm -rf "$d"
+              else
+                echo "Moving new directory: $d -> LeetCode/"
+                mv "$d" "LeetCode/"
+              fi
             fi
           done
 
@@ -51,7 +58,7 @@ jobs:
             git config --global user.name 'github-actions[bot]'
             git config --global user.email 'github-actions[bot]@users.noreply.github.com'
             git add -A
-            git commit -m "chore: Move LeetCode solutions to LeetCode folder"
+            git commit -m "chore: sync LeetCode solutions"
             git pull --rebase origin main
             git push origin main
           else
