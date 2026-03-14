@@ -7,6 +7,4 @@ class Solution:
                 new[r][c] = matrix[n-1-c][r] 
         for r in range(n):
             for c in range(n):
-                matrix[r][c] = new[r][c]
-
-        
+                matrix[r][c] = new[r][c] 
