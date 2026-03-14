@@ -11,7 +11,7 @@ on:
 
 concurrency:
   group: move-leetcode-main
-  cancel-in-progress: false
+  cancel-in-progress: true
 
 jobs:
   move-files:
