@@ -9,5 +9,6 @@ class Solution:
             tot += nums[e+1]
             s,e = s+1,e+1
             mn = max(mn,tot)
+            
         return mn/k
             
